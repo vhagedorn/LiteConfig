@@ -1,0 +1,4 @@
+rootProject.name = 'LiteConfig'
+include ':shared', ':bukkit'
+include 'gson'
+

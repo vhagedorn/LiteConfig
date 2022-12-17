@@ -1,0 +1,9 @@
+# Project exclude paths
+/.gradle/
+/bukkit/target/
+/bukkit/target/classes/java/main/
+/gson/target/
+/gson/target/classes/java/main/
+/gson/target/classes/java/test/
+/shared/target/
+/shared/target/classes/java/main/

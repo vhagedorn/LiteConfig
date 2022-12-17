@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'me.vadim.util.conf'
+version '1.0'
+
+def basename = rootProject.name.concat('-').concat(project.name)
+
+project.buildDir project.projectDir.path + '/target'
+
+repositories {}
+dependencies {}
+
+jar {
+    destinationDirectory.set(project.buildDir)
+    archiveBaseName.set(basename)
+    archiveFileName.set(archiveFileName.get().replaceAll('.jar', '-unshaded.jar'))//append '-unshaded' to the end
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.register("sourceJar", Jar) {
+    from(sourceSets.main.allSource)
+    archiveClassifier.set("sources")
+    classifier = "sources"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            version = project.version.toString()
+            groupId = project.group.toString()
+
+            from components["java"]
+
+            afterEvaluate {
+                artifactId = basename
+            }
+
+            artifact(sourceJar)
+        }
+    }
+}
