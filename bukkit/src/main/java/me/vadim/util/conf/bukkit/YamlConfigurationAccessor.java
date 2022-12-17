@@ -50,6 +50,14 @@ public class YamlConfigurationAccessor implements ConfigurationAccessor {
     }
 
     @Override
+    public ConfigurationAccessor[] getChildren() {
+        return section.getKeys(false).stream()
+                      .map(section::getConfigurationSection)
+                      .map(s -> new YamlConfigurationAccessor(file, s))
+                      .toArray(ConfigurationAccessor[]::new);
+    }
+
+    @Override
     public boolean has(String path) {
         return section.contains(path);
     }

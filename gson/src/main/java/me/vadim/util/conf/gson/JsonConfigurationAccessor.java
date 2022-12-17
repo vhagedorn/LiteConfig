@@ -1,11 +1,13 @@
 package me.vadim.util.conf.gson;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import me.vadim.util.conf.ConfigurationAccessor;
 import me.vadim.util.conf.wrapper.PlaceholderMessage;
 import me.vadim.util.conf.wrapper.impl.UnformattedMessage;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -56,6 +58,16 @@ public class JsonConfigurationAccessor implements ConfigurationAccessor {
     @Override
     public ConfigurationAccessor getObject(String path) {
         return has(path) ? new JsonConfigurationAccessor(file, object.getAsJsonObject(path)) : null;
+    }
+
+    @Override
+    public ConfigurationAccessor[] getChildren() {
+        return object.entrySet().stream()
+                     .map(Map.Entry::getValue)
+                     .filter(JsonElement::isJsonObject)
+                     .map(JsonElement::getAsJsonObject)
+                     .map(e -> new JsonConfigurationAccessor(file, e))
+                     .toArray(ConfigurationAccessor[]::new);
     }
 
     @Override

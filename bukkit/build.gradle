@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.vadim.util.conf'
-version '1.0'
+version '1.1'
 
 def basename = rootProject.name.concat('-').concat(project.name)
 

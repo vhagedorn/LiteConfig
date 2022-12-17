@@ -62,19 +62,21 @@ class GsonTest {
 
 		ConfigurationAccessor ca = a.getConfigurationAccessor();
 
-		Assertions.assertEquals(ca.getInt("int"), -2);
+		Assertions.assertEquals(-2, ca.getInt("int"));
 
-		Assertions.assertEquals(ca.getString("string"), "Hello, world!");
+		Assertions.assertEquals("Hello, world!", ca.getString("string"));
 
 		ConfigurationAccessor o = ca.getObject("object");
 		Assertions.assertNotNull(o);
-		Assertions.assertEquals(o.getDouble("double"), 3.14);
+		Assertions.assertEquals(3.14, o.getDouble("double"));
 
+		Assertions.assertEquals(0, o.getChildren().length);
+		Assertions.assertEquals(1, ca.getChildren().length);
 //		Assertions.assertArrayEquals(ca.getList("list"), new String[]{ "a", "b", "c" });//todo lists
 
 		Assertions.assertNull(ca.getString("null"));
 		Assertions.assertNull(ca.getObject("null"));
-		Assertions.assertEquals(ca.getInt("null"), 0);
+		Assertions.assertEquals(0, ca.getInt("null"));
 		Assertions.assertFalse(ca.getBoolean("null"));
 	}
 

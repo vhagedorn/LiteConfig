@@ -20,6 +20,11 @@ public interface ConfigurationAccessor {
 	ConfigurationAccessor getObject(String path);
 
 	/**
+	 * @return all child object nodes at the current level, or an empty array
+	 */
+	ConfigurationAccessor[] getChildren();
+
+	/**
 	 * @return whether or not the specified path exists and is not null
 	 */
 	boolean has(String path);
