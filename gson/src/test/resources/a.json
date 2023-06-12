@@ -1,6 +1,14 @@
 {
   "int": -2,
   "string": "Hello, world!",
+  "objlist": [
+    {
+      "test": "string"
+    },
+    {
+      "another": "object"
+    }
+  ],
   "list": [ "a", "b", "c" ],
   "object": {
     "double": 3.14
