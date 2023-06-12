@@ -16,12 +16,19 @@ import java.util.logging.Logger;
  */
 public class JsonConfigurationAccessor implements ConfigurationAccessor {
 
-    private final JsonFile file;
-    private final JsonObject                    object;
+	private final JsonFile   file;
+	private final JsonObject object;
+	private final String     key;
 
-    public JsonConfigurationAccessor(JsonFile file, JsonObject object) {
+    public JsonConfigurationAccessor(String key, JsonFile file, JsonObject object) {
+        this.key    = key;
         this.file   = file;
         this.object = object;
+    }
+
+    @Override
+    public String currentPath() {
+        return key;
     }
 
     private <T> T nonNull(T nullable, String path){
@@ -57,16 +64,15 @@ public class JsonConfigurationAccessor implements ConfigurationAccessor {
 
     @Override
     public ConfigurationAccessor getObject(String path) {
-        return has(path) ? new JsonConfigurationAccessor(file, object.getAsJsonObject(path)) : null;
+        return has(path) ? new JsonConfigurationAccessor(path, file, object.getAsJsonObject(path)) : null;
     }
 
     @Override
     public ConfigurationAccessor[] getChildren() {
         return object.entrySet().stream()
-                     .map(Map.Entry::getValue)
-                     .filter(JsonElement::isJsonObject)
-                     .map(JsonElement::getAsJsonObject)
-                     .map(e -> new JsonConfigurationAccessor(file, e))
+                     .filter(e -> e.getValue().isJsonObject())
+                     .map(e -> Map.entry(e.getKey(), e.getValue().getAsJsonObject()))
+                     .map(e -> new JsonConfigurationAccessor(e.getKey(), file, e.getValue()))
                      .toArray(ConfigurationAccessor[]::new);
     }
 

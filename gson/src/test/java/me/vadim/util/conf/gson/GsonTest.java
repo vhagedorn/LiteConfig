@@ -31,7 +31,8 @@ class GsonTest {
 
 			@Override
 			public InputStream getResource(String name) {
-				return getClass().getResourceAsStream(name);
+				//getResource is funky and wants the filename prepended with a slash ('/')
+				return getClass().getResourceAsStream('/' + stripPrependingPathSeparator(name));
 			}
 
 			@Override
@@ -61,12 +62,14 @@ class GsonTest {
 		a.load();
 
 		ConfigurationAccessor ca = a.getConfigurationAccessor();
+		Assertions.assertNull(ca.currentPath());
 
 		Assertions.assertEquals(-2, ca.getInt("int"));
 
 		Assertions.assertEquals("Hello, world!", ca.getString("string"));
 
 		ConfigurationAccessor o = ca.getObject("object");
+		Assertions.assertEquals("object", o.currentPath());
 		Assertions.assertNotNull(o);
 		Assertions.assertEquals(3.14, o.getDouble("double"));
 

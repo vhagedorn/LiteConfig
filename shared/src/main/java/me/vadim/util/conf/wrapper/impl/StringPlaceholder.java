@@ -6,16 +6,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Represents a generic map-based placeholder for string values. Custom implementations are also possible, but this a straightforward and reusable example. <p>
+ * The {@link #format} defines what the placeholders should look like in the user-inputted text. The default value is {@code "{%s}"},
+ * therefore, in a configuration, a {@code "NAME"} placeholder would look like:
+ * <ul><li> {@code value: "This is a string in a config. Hello, {NAME}!" } </li></ul>
+ * And may be filled in like so:
+ * <pre>
+ * {@code
+ * StringPlaceholder.builder().set("NAME", "World").build().format(placeholderMessageFromConfig);
+ * }
+ * </pre>
+ * Which would yield the following message:
+ * <ul><li>{@code "This is a string in a config. Hello, World!" } </li></ul>
  * @author vadim
  */
 public class StringPlaceholder implements Placeholder {
 
-	@SuppressWarnings("StaticNonFinalField")
-	public static String              format = "{%s}";
+	public final String format;
 
 	private final Map<String, String> placeholders;
 
-	public StringPlaceholder(Map<String, String> placeholders) {
+	public StringPlaceholder(String format, Map<String, String> placeholders) {
+		this.format = format;
 		this.placeholders = placeholders;
 	}
 
@@ -34,6 +46,7 @@ public class StringPlaceholder implements Placeholder {
 
 	public static final class Builder {
 		private final Map<String, String> map = new HashMap<>();
+		private String format = "{%s}";
 
 		private Builder() {}
 
@@ -42,6 +55,11 @@ public class StringPlaceholder implements Placeholder {
 			return this;
 		}
 
-		public StringPlaceholder build() { return new StringPlaceholder(map); }
+		public Builder setFormat(String format) {
+			this.format = format;
+			return this;
+		}
+
+		public StringPlaceholder build() { return new StringPlaceholder(format, map); }
 	}
 }

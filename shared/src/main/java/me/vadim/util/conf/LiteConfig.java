@@ -36,4 +36,8 @@ public class LiteConfig implements ConfigurationManager {
 		configs.values().forEach(ConfigurationFile::reload);
 	}
 
+	@Override
+	public void save() {
+		configs.values().forEach(ConfigurationFile::save);
+	}
 }

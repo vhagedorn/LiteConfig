@@ -1,14 +1,14 @@
 package me.vadim.util.conf.gson;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import me.vadim.util.conf.ConfigurationAccessor;
 import me.vadim.util.conf.ConfigurationFile;
 import me.vadim.util.conf.ResourceProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -37,6 +37,25 @@ public abstract class JsonFile extends ConfigurationFile<JsonElement> {
 	protected ConfigurationAccessor getConfigurationAccessor() { return wrapper; }
 
 	@Override
+	protected void setTemplate(JsonElement template) {
+		super.setTemplate(template);
+	}
+
+	@Override
+	protected void setDefaultTemplate() {
+		String path = fromRoot.getPath();
+		if (path.startsWith(File.separator)) path = path.substring(1);
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			resourceProvider.getResource(path).transferTo(baos);
+			setTemplate(JsonParser.parseString(baos.toString(StandardCharsets.UTF_8)));
+		} catch (IOException e){
+			sneaky(e);
+		}
+	}
+
+	@Override
 	protected Void logError(Logger log, String path) {
 		return logError(log, path, path);
 	}
@@ -55,9 +74,12 @@ public abstract class JsonFile extends ConfigurationFile<JsonElement> {
 
 	@Override
 	protected void createConfiguration() throws Exception {
-		json = JsonParser.parseString(getContent());
+		if(getContent().length() > 0)
+			json = JsonParser.parseString(getContent());
+		else
+			json = new JsonObject();
 		if (!json.isJsonObject()) throw new IllegalArgumentException(json.toString());//hmm
-		wrapper = new JsonConfigurationAccessor(this, json.getAsJsonObject());
+		wrapper = new JsonConfigurationAccessor(null, this, json.getAsJsonObject());
 	}
 
 	@Override

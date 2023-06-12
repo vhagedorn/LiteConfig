@@ -5,6 +5,7 @@ import me.vadim.util.conf.wrapper.PlaceholderMessage;
 import me.vadim.util.conf.wrapper.impl.UnformattedMessage;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -12,16 +13,42 @@ import java.util.logging.Logger;
  */
 public class YamlConfigurationAccessor implements ConfigurationAccessor {
 
-    private final YamlFile             file;
-    private final ConfigurationSection section;
+    private final YamlFile                  file;
+    private final ConfigurationSection      section;
+    private final YamlConfigurationAccessor parent;
+    private final String                    path;
 
-    public YamlConfigurationAccessor(YamlFile file, ConfigurationSection section) {
-        this.file = file;
-        this.section = section;
+    public YamlConfigurationAccessor(String subpath, YamlFile file, ConfigurationSection section) {
+        this(subpath, null, file, section);
+    }
+
+	public YamlConfigurationAccessor(String subpath, YamlConfigurationAccessor parent, YamlFile file, ConfigurationSection section) {
+		this.path    = subpath;
+		this.parent  = parent;
+		this.file    = file;
+		this.section = section;
+	}
+
+    private String fullPathTo(String subpath) {
+        String fp = fullPath(this);
+        return fp == null
+               ? subpath
+               : fp + '.' + subpath;
+    }
+
+    private String fullPath(YamlConfigurationAccessor parent) {
+        return (parent.parent != null
+                ? fullPath(parent.parent) + '.' + parent.path
+                : null);
+    }
+
+    @Override
+    public String currentPath() {
+        return path;
     }
 
     private <T> T nonNull(T nullable, String path){
-        return nullable == null ? (T) file.logError(Logger.getGlobal(), path) : nullable;
+        return nullable == null ? (T) file.logError(Logger.getGlobal(), fullPathTo(path)) : nullable;
     }
 
     @Override
@@ -46,14 +73,14 @@ public class YamlConfigurationAccessor implements ConfigurationAccessor {
 
     @Override
     public ConfigurationAccessor getObject(String path) {
-        return new YamlConfigurationAccessor(file, section.getConfigurationSection(path));
+        return new YamlConfigurationAccessor(path, this, file, section.getConfigurationSection(path));
     }
 
     @Override
     public ConfigurationAccessor[] getChildren() {
         return section.getKeys(false).stream()
-                      .map(section::getConfigurationSection)
-                      .map(s -> new YamlConfigurationAccessor(file, s))
+                      .map(section::getConfigurationSection).filter(Objects::nonNull)
+                      .map(s -> new YamlConfigurationAccessor(s.getCurrentPath(), this, file, s))
                       .toArray(ConfigurationAccessor[]::new);
     }
 

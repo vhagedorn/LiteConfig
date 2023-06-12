@@ -6,7 +6,7 @@ import java.util.function.Function;
  * Defines a class capable of managing {@link ConfigurationFile} instances.
  * @author vadim
  */
-public interface ConfigurationManager {
+public interface ConfigurationManager extends ConfigurationProvider {
 
 	/**
 	 * Register and load a config.
@@ -18,17 +18,13 @@ public interface ConfigurationManager {
 	<T extends ConfigurationFile<?>> ConfigurationManager register(Class<T> clazz, Function<ResourceProvider, T> factory);
 
 	/**
-	 * Retrieve a {@link #register(Class, Function) registered} config.
-	 * @param clazz the target class (inherits from {@link T})
-	 * @param <T> target class type
-	 * @return the instance of the registered config
-	 * @throws IllegalArgumentException if {@code clazz} is not {@link #register(Class, Function) registered}
-	 */
-	<T extends ConfigurationFile<?>> T open(Class<T> clazz);
-
-	/**
-	 * Reloads all currently registered configs.
+	 * {@link ConfigurationFile#reload() Reloads} all currently registered configs.
 	 */
 	void reload();
+
+	/**
+	 * {@link ConfigurationFile#save() Saves} all currently registered configs.
+	 */
+	void save();
 
 }

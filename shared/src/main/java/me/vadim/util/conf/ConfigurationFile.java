@@ -39,6 +39,9 @@ public abstract class ConfigurationFile<C> extends BufferedFile {
     protected abstract Void logError(Logger log, String path);
     protected abstract Void logError(Logger log, String path, String name);
 
+    /**
+     * Reload this config by calling {@link #load()} and then {@link #save()}.
+     */
     public abstract void reload();
 
     protected abstract void createConfiguration() throws Exception;
@@ -49,8 +52,6 @@ public abstract class ConfigurationFile<C> extends BufferedFile {
         try {
             if(getBuffer().length == 0) {//empty (first load)
                 String path = fromRoot.getPath();
-                if(path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator)) path = path.substring(1);
-                path = '/' + path;//getResource is funky and wants the filename prepended with a slash ('/')
                 InputStream resource = resourceProvider.getResource(path);
                 if(resource != null)
                     Files.copy(resource, file.toPath(), StandardCopyOption.REPLACE_EXISTING);

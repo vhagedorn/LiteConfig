@@ -32,28 +32,6 @@ public interface ConfigurationAccessor {
 	/*
 	 * Object getter methods will return null if the specified path references null or is nonexistent
 	 */
+	String currentPath();
 
-	String getString(String path);
-
-	char getChar(String path);
-
-	PlaceholderMessage getPlaceholder(String path);
-
-	/*
-	 * primitive getter methods will return zero (or false) if the specified path references a null or is nonexistent
-	 */
-
-	boolean getBoolean(String path);
-
-	byte getByte(String path);
-
-	short getShort(String path);
-
-	int getInt(String path);
-
-	long getLong(String path);
-
-	float getFloat(String path);
-
-	double getDouble(String path);
 }

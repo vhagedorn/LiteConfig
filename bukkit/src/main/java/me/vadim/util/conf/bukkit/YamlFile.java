@@ -22,7 +22,7 @@ public abstract class YamlFile extends ConfigurationFile<YamlConfiguration> {
             .parseComments(true)
             .configuration();
 
-    protected final ConfigurationAccessor wrapper = new YamlConfigurationAccessor(this, yaml);
+    protected final ConfigurationAccessor wrapper = new YamlConfigurationAccessor(null, this, yaml);
 
     public YamlFile(File file, ResourceProvider resourceProvider) {
         super(file, resourceProvider);
