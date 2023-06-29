@@ -65,9 +65,12 @@ public class Test implements ResourceProvider {
     public void start(){
        configMgr.register(ConfigMini.class, ConfigMini::new);
         
+       //pass configMgr as ConfigurationProvider via constructor or create a public getter
+       //...
+       //now there is access to config class
+
        ConfigMini mini = configMgr.open(ConfigMini.class);
         
-       //access to config class
        mini.shopkeeper = 69;
     }
 
@@ -89,6 +92,7 @@ public class ConfigMini extends YamlFile {
     
     public ConfigMini(ResourceProvider rp) {
         super("config.yml", rp);
+        setDefaultTemplate(); // call this to have the user-inputted config be backed by the default config (placed in the resources folder)
     }
   
     public int shopkeeper;
