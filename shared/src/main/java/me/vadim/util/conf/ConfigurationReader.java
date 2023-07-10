@@ -4,6 +4,7 @@ import me.vadim.util.conf.wrapper.PlaceholderMessage;
 
 /**
  * Provides read access to a configuration.
+ *
  * @author vadim
  */
 public interface ConfigurationReader {

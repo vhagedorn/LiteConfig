@@ -5,14 +5,19 @@ plugins {
 }
 
 group 'me.vadim.util.conf'
-version '1.5'
+version '1.6'
 
 def basename = rootProject.name.concat('-').concat(project.name)
 
 project.buildDir project.projectDir.path + '/target'
 
-repositories {}
-dependencies {}
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+dependencies {
+    implementation 'org.jetbrains:annotations:24.0.1'
+}
 
 jar {
     destinationDirectory.set(project.buildDir)

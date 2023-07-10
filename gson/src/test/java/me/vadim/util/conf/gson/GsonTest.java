@@ -58,7 +58,7 @@ class GsonTest {
 
 		//access
 		ConfigA a = config.open(ConfigA.class);
-		if(a.file.exists()) Files.delete(a.file.toPath());
+		if (a.file.exists()) Files.delete(a.file.toPath());
 		a.load();
 
 		ConfigurationAccessor ca = a.getConfigurationAccessor();
@@ -75,7 +75,11 @@ class GsonTest {
 
 		Assertions.assertEquals(0, o.getChildren().length);
 		Assertions.assertEquals(1, ca.getChildren().length);
-//		Assertions.assertArrayEquals(ca.getList("list"), new String[]{ "a", "b", "c" });//todo lists
+
+		ConfigurationAccessor[] objs = ca.getObjectArray("objlist");
+		Assertions.assertEquals("string", objs[0].getString("test"));
+		Assertions.assertEquals("object", objs[1].getString("another"));
+		Assertions.assertArrayEquals(ca.getStringArray("list"), new String[] { "a", "b", "c" });
 
 		Assertions.assertNull(ca.getString("null"));
 		Assertions.assertNull(ca.getObject("null"));

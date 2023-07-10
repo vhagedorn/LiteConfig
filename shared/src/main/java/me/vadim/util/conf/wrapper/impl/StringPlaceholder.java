@@ -2,6 +2,7 @@ package me.vadim.util.conf.wrapper.impl;
 
 import me.vadim.util.conf.wrapper.Placeholder;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,28 @@ import java.util.Map;
  * </pre>
  * Which would yield the following message:
  * <ul><li>{@code "This is a string in a config. Hello, World!" } </li></ul>
+ * <p>
+ * Users wanting custom formats are advised to extend this class and provide a custom static method, e.g.:
+ * <pre>{@code
+ * public class PercentPlaceholder extends StringPlaceholder {
+ *
+ * 	// extra %s due to usage of String.format(message, key) in StringPlaceholder
+ * 	private static final String format = "%%%s%%";
+ *
+ *    public PercentPlaceholder(String format, Map<String, String> placeholders) {
+ * 		super(format, placeholders);
+ *    }
+ *
+ *    public static Builder builder() {
+ * 		return StringPlaceholder.builder().setFormat(format);
+ *    }
+ *
+ *    public static StringPlaceholder of(String key, String value) {
+ * 		return builder().set(key, value).build();
+ *    }
+ * }
+ * }</pre>
+ *
  * @author vadim
  */
 public class StringPlaceholder implements Placeholder {
@@ -27,7 +50,7 @@ public class StringPlaceholder implements Placeholder {
 	private final Map<String, String> placeholders;
 
 	public StringPlaceholder(String format, Map<String, String> placeholders) {
-		this.format = format;
+		this.format       = format;
 		this.placeholders = placeholders;
 	}
 
@@ -39,18 +62,25 @@ public class StringPlaceholder implements Placeholder {
 		return raw;
 	}
 
-	public static Builder builder()                              { return new Builder(); }
+	@Override
+	public Placeholder merge(Placeholder... other) {
+		return new MergedPlaceholder(Arrays.asList(other));
+	}
+
+	public static Builder builder() { return new Builder(); }
+
 	public static StringPlaceholder of(String key, String value) { return builder().set(key, value).build(); }
 
 	public static final StringPlaceholder EMPTY = builder().build();
 
 	public static final class Builder {
+
 		private final Map<String, String> map = new HashMap<>();
 		private String format = "{%s}";
 
-		private Builder() {}
+		private Builder() { }
 
-		public Builder set(String key, String value){
+		public Builder set(String key, String value) {
 			map.put(key, value);
 			return this;
 		}
@@ -61,5 +91,7 @@ public class StringPlaceholder implements Placeholder {
 		}
 
 		public StringPlaceholder build() { return new StringPlaceholder(format, map); }
+
 	}
+
 }

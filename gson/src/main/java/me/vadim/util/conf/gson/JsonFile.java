@@ -1,6 +1,10 @@
 package me.vadim.util.conf.gson;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import me.vadim.util.conf.ConfigurationAccessor;
 import me.vadim.util.conf.ConfigurationFile;
 import me.vadim.util.conf.ResourceProvider;
@@ -50,18 +54,13 @@ public abstract class JsonFile extends ConfigurationFile<JsonElement> {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			resourceProvider.getResource(path).transferTo(baos);
 			setTemplate(JsonParser.parseString(baos.toString(StandardCharsets.UTF_8)));
-		} catch (IOException e){
+		} catch (IOException e) {
 			sneaky(e);
 		}
 	}
 
 	@Override
-	protected Void logError(Logger log, String path) {
-		return logError(log, path, path);
-	}
-
-	@Override
-	protected Void logError(Logger log, String path, String name) {
+	public Void logError(Logger log, String path, String name) {
 		sneaky(new JsonParseException(name));
 		return null;
 	}
@@ -74,7 +73,7 @@ public abstract class JsonFile extends ConfigurationFile<JsonElement> {
 
 	@Override
 	protected void createConfiguration() throws Exception {
-		if(getContent().length() > 0)
+		if (getContent().length() > 0)
 			json = JsonParser.parseString(getContent());
 		else
 			json = new JsonObject();

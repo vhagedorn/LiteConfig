@@ -12,6 +12,6 @@ class ConfigA extends JsonFile {
 		super("a.json", resourceProvider);
 	}
 
-	public ConfigurationAccessor getConfigurationAccessor(){ return super.getConfigurationAccessor(); }
+	public ConfigurationAccessor getConfigurationAccessor() { return super.getConfigurationAccessor(); }
 
 }

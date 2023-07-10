@@ -7,3 +7,5 @@
 /gson/target/classes/java/test/
 /shared/target/
 /shared/target/classes/java/main/
+
+!**/build.gradle

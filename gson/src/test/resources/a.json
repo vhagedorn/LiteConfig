@@ -9,7 +9,11 @@
       "another": "object"
     }
   ],
-  "list": [ "a", "b", "c" ],
+  "list": [
+    "a",
+    "b",
+    "c"
+  ],
   "object": {
     "double": 3.14
   },

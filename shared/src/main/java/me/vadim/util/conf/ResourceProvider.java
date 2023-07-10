@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * Provides various resources to this library.
+ *
  * @author vadim
  */
 
@@ -14,14 +15,15 @@ public interface ResourceProvider {
 	/**
 	 * Utility function for implementing classes.
 	 */
-	default String stripPrependingPathSeparator(String path){
-		if(path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator))
+	default String stripPrependingPathSeparator(String path) {
+		if (path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator))
 			path = path.substring(1);
 		return path;
 	}
 
 	/**
 	 * Usually the CWD.
+	 *
 	 * @return the directory in which to store configuration files, etc.
 	 */
 	File getDataFolder();

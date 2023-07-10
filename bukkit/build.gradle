@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.vadim.util.conf'
-version '1.5'
+version '1.6'
 
 def basename = rootProject.name.concat('-').concat(project.name)
 
@@ -20,6 +20,7 @@ repositories {
 dependencies {
     implementation project(':shared')
     compileOnly 'org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT'
+    implementation 'org.jetbrains:annotations:24.0.1'
 }
 
 

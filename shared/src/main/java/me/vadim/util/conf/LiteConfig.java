@@ -19,7 +19,7 @@ public class LiteConfig implements ConfigurationManager {
 	}
 
 	@Override
-	public <T extends ConfigurationFile<?>> LiteConfig register(Class<T> clazz, Function<ResourceProvider, T> factory){
+	public <T extends ConfigurationFile<?>> LiteConfig register(Class<T> clazz, Function<ResourceProvider, T> factory) {
 		configs.put(clazz, factory.apply(resourceProvider));
 		return this;
 	}
@@ -28,11 +28,11 @@ public class LiteConfig implements ConfigurationManager {
 	@SuppressWarnings("unchecked")
 	public <T extends ConfigurationFile<?>> T open(Class<T> clazz) {
 		String canonical = clazz.getCanonicalName();
-		return (T) Optional.ofNullable(configs.get(clazz)).orElseThrow(() -> new IllegalArgumentException("Configuration class '"+canonical+"' not registered."));
+		return (T) Optional.ofNullable(configs.get(clazz)).orElseThrow(() -> new IllegalArgumentException("Configuration class '" + canonical + "' not registered."));
 	}
 
 	@Override
-	public void reload(){
+	public void reload() {
 		configs.values().forEach(ConfigurationFile::reload);
 	}
 
@@ -40,4 +40,5 @@ public class LiteConfig implements ConfigurationManager {
 	public void save() {
 		configs.values().forEach(ConfigurationFile::save);
 	}
+
 }
