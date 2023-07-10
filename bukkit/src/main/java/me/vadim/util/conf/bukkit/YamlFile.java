@@ -8,16 +8,21 @@ import me.vadim.util.conf.bukkit.wrapper.EffectParticle;
 import me.vadim.util.conf.bukkit.wrapper.EffectSound;
 import me.vadim.util.conf.bukkit.wrapper.OptionalMessage;
 import me.vadim.util.conf.wrapper.PlaceholderMessage;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * {@link org.bukkit.configuration.file.YamlConfiguration} config.
@@ -104,6 +109,36 @@ public abstract class YamlFile extends ConfigurationFile<YamlConfiguration> {
 	}
 
     /* Convenience getters. */
+
+	protected ItemStack getItem(String path) {
+		ConfigurationAccessor conf = getConfigurationAccessor().getPath(path);
+
+		String   name = conf.getString("name");
+		String[] lore = conf.getStringArray("lore");
+		Material type = Material.matchMaterial(conf.getString("type"));
+
+		if (name == null)
+			logError(resourceProvider.getLogger(), path + ".name", "item name");
+		assert name != null;
+		if (lore == null)
+			logError(resourceProvider.getLogger(), path + ".lore", "item lore");
+		assert lore != null;
+		if (type == null)
+			logError(resourceProvider.getLogger(), path + ".type", "item type");
+		assert type != null;
+
+		ItemStack item = new ItemStack(type);
+		ItemMeta meta = item.getItemMeta();
+		if(!item.hasItemMeta() || meta == null)
+			return item;
+
+		meta.setDisplayName(BukkitPlaceholders.colorize(name));
+		meta.setLore(Arrays.stream(lore).map(BukkitPlaceholders::colorize).collect(Collectors.toList()));
+
+		item.setItemMeta(meta);
+
+		return item;
+	}
 
     protected static String[] OPTIONAL_DISABLED = { "null", "disable", "disabled", "off", "" };
 
