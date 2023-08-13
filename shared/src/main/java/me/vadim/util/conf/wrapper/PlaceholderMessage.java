@@ -7,8 +7,8 @@ package me.vadim.util.conf.wrapper;
  */
 public interface PlaceholderMessage {
 
-	String raw();
+	public String raw();
 
-	String format(Placeholder placeholder);
+	public String format(Placeholder placeholder);
 
 }

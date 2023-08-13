@@ -1,6 +1,9 @@
 package me.vadim.util.conf.wrapper.impl;
 
+import me.vadim.util.conf.wrapper.NumberFormatter;
 import me.vadim.util.conf.wrapper.Placeholder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,7 +50,7 @@ public class StringPlaceholder implements Placeholder {
 
 	public final String format;
 
-	private final Map<String, String> placeholders;
+	protected final Map<String, String> placeholders;
 
 	public StringPlaceholder(String format, Map<String, String> placeholders) {
 		this.format       = format;
@@ -69,24 +72,78 @@ public class StringPlaceholder implements Placeholder {
 
 	public static Builder builder() { return new Builder(); }
 
-	public static StringPlaceholder of(String key, String value) { return builder().set(key, value).build(); }
+	/**
+	 * Single-value factory method. For overloads see {@link me.vadim.util.conf.wrapper.Placeholders}.
+	 */
+	public static StringPlaceholder of(@NotNull String key, @NotNull String value) { return builder().set(key, value).build(); }
 
 	public static final StringPlaceholder EMPTY = builder().build();
 
-	public static final class Builder {
+	public static class Builder {
 
-		private final Map<String, String> map = new HashMap<>();
-		private String format = "{%s}";
+		protected final Map<String, String> map = new HashMap<>();
+		protected String format = "{%s}";
+		protected NumberFormatter formatter = NumberFormatter.valueOf;
 
-		private Builder() { }
+		protected Builder() { }
 
-		public Builder set(String key, String value) {
+		public Builder set(@NotNull String key, @NotNull String value) {
 			map.put(key, value);
+			return this;
+		}
+
+		public Builder set(@NotNull String key, byte value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, short value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, int value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, long value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, float value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, double value) {
+			map.put(key, formatter.formatNumber(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, boolean value) {
+			map.put(key, String.valueOf(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, char value) {
+			map.put(key, String.valueOf(value));
+			return this;
+		}
+
+		public Builder set(@NotNull String key, @Nullable Object value) {
+			map.put(key, value instanceof Number ? formatter.formatNumber((Number) value) : String.valueOf(value));
 			return this;
 		}
 
 		public Builder setFormat(String format) {
 			this.format = format;
+			return this;
+		}
+
+		public Builder setNumberFormat(NumberFormatter formatter) {
+			this.formatter = formatter;
 			return this;
 		}
 

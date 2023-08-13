@@ -32,6 +32,6 @@ public interface ConfigurationAccessor {
 	/*
 	 * Object getter methods will return null if the specified path references null or is nonexistent
 	 */
-	String currentPath();
+	public String currentPath();
 
 }

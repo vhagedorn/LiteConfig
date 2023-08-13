@@ -8,6 +8,7 @@ import me.vadim.util.conf.bukkit.wrapper.EffectParticle;
 import me.vadim.util.conf.bukkit.wrapper.EffectSound;
 import me.vadim.util.conf.bukkit.wrapper.OptionalMessage;
 import me.vadim.util.conf.wrapper.PlaceholderMessage;
+import me.vadim.util.conf.wrapper.impl.StringPlaceholder;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -129,13 +130,15 @@ public abstract class YamlFile extends ConfigurationFile<YamlConfiguration> {
 
 		ItemStack item = new ItemStack(type);
 		ItemMeta meta = item.getItemMeta();
-		if(!item.hasItemMeta() || meta == null)
+		if(meta == null)
 			return item;
 
 		meta.setDisplayName(BukkitPlaceholders.colorize(name));
 		meta.setLore(Arrays.stream(lore).map(BukkitPlaceholders::colorize).collect(Collectors.toList()));
 
 		item.setItemMeta(meta);
+
+		StringPlaceholder.builder().set("test", 1.0f);
 
 		return item;
 	}

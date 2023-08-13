@@ -15,7 +15,7 @@ public interface ResourceProvider {
 	/**
 	 * Utility function for implementing classes.
 	 */
-	default String stripPrependingPathSeparator(String path) {
+	public default String stripPrependingPathSeparator(String path) {
 		if (path.startsWith("/") || path.startsWith("\\") || path.startsWith(File.separator))
 			path = path.substring(1);
 		return path;
@@ -26,16 +26,16 @@ public interface ResourceProvider {
 	 *
 	 * @return the directory in which to store configuration files, etc.
 	 */
-	File getDataFolder();
+	public File getDataFolder();
 
 	/**
 	 * @return an {@link InputStream} of the packaged resource denoted by {@code name}
 	 */
-	InputStream getResource(String name);
+	public InputStream getResource(String name);
 
 	/**
 	 * @return a {@link Logger java.util.logging.Logger} through which to log configuration messages
 	 */
-	Logger getLogger();
+	public Logger getLogger();
 
 }

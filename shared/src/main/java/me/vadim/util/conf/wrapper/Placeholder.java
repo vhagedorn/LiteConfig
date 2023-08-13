@@ -7,8 +7,8 @@ package me.vadim.util.conf.wrapper;
  */
 public interface Placeholder {
 
-	String format(String raw);
+	public String format(String raw);
 
-	Placeholder merge(Placeholder... other);
+	public Placeholder merge(Placeholder... other);
 
 }

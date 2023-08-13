@@ -19,6 +19,6 @@ public interface ConfigurationProvider {
 	 *
 	 * @throws IllegalArgumentException if {@code clazz} is not {@link ConfigurationManager#register(Class, Function) registered}
 	 */
-	<T extends ConfigurationFile<?>> T open(Class<T> clazz);
+	public <T extends ConfigurationFile<?>> T open(Class<T> clazz);
 
 }

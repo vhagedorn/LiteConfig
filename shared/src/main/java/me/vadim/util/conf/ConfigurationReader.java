@@ -12,54 +12,54 @@ public interface ConfigurationReader {
 	/**
 	 * @return object by path split by '.'
 	 */
-	ConfigurationAccessor getPath(String path);
+	public ConfigurationAccessor getPath(String path);
 
 	/**
 	 * @return object as defined by implementation (not guaranteed to be split by '.')
 	 */
-	ConfigurationAccessor getObject(String path);
+	public ConfigurationAccessor getObject(String path);
 
 	/**
 	 * @return all child object nodes at the current level, or an empty array
 	 */
-	ConfigurationAccessor[] getChildren();
+	public ConfigurationAccessor[] getChildren();
 
 	/**
 	 * @return whether or not the specified path exists and is not null
 	 */
-	boolean has(String path);
+	public boolean has(String path);
 
 	/*
 	 * Object getter methods will return null if the specified path references null or is nonexistent
 	 */
 
-	String getString(String path);
+	public String getString(String path);
 
-	char getChar(String path);
+	public char getChar(String path);
 
-	PlaceholderMessage getPlaceholder(String path);
+	public PlaceholderMessage getPlaceholder(String path);
 
 	/*
 	 * primitive getter methods will return zero (or false) if the specified path references a null or is nonexistent
 	 */
 
-	boolean getBoolean(String path);
+	public boolean getBoolean(String path);
 
-	byte getByte(String path);
+	public byte getByte(String path);
 
-	short getShort(String path);
+	public short getShort(String path);
 
-	int getInt(String path);
+	public int getInt(String path);
 
-	long getLong(String path);
+	public long getLong(String path);
 
-	float getFloat(String path);
+	public float getFloat(String path);
 
-	double getDouble(String path);
+	public double getDouble(String path);
 
-	String[] getStringArray(String path);
+	public String[] getStringArray(String path);
 
-	ConfigurationAccessor[] getObjectArray(String path);
+	public ConfigurationAccessor[] getObjectArray(String path);
 
 	//todo: primitive array? number array? bigdecimal/biginteger array?
 

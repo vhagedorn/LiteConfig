@@ -18,16 +18,16 @@ public interface ConfigurationManager extends ConfigurationProvider {
 	 *
 	 * @return {@code this} instance, for chaining
 	 */
-	<T extends ConfigurationFile<?>> ConfigurationManager register(Class<T> clazz, Function<ResourceProvider, T> factory);
+	public <T extends ConfigurationFile<?>> ConfigurationManager register(Class<T> clazz, Function<ResourceProvider, T> factory);
 
 	/**
 	 * {@link ConfigurationFile#reload() Reloads} all currently registered configs.
 	 */
-	void reload();
+	public void reload();
 
 	/**
 	 * {@link ConfigurationFile#save() Saves} all currently registered configs.
 	 */
-	void save();
+	public void save();
 
 }
