@@ -98,4 +98,14 @@ public class YamlConfigurationAccessor extends AbstractConfigurationAccessor<Yam
 		return section.getDouble(path);
 	}
 
+	@Override
+	public String[] getStringArray(String path) {
+		return section.getStringList(path).toArray(String[]::new);
+	}
+
+	@Override
+	public ConfigurationAccessor[] getObjectArray(String path) {
+		throw new UnsupportedOperationException("YAML does not support object lists.");
+	}
+
 }

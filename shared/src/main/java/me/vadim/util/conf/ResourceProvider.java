@@ -9,7 +9,6 @@ import java.util.logging.Logger;
  *
  * @author vadim
  */
-
 public interface ResourceProvider {
 
 	/**

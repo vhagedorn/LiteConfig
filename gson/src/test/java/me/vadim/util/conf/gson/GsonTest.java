@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  */
 class GsonTest {
 
-	private        LiteConfig       lite;
 	private static ResourceProvider resourceProvider;
 
 	@BeforeAll

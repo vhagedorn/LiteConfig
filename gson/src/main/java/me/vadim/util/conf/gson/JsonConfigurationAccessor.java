@@ -111,4 +111,14 @@ public class JsonConfigurationAccessor extends AbstractConfigurationAccessor<Jso
 		return getPrimitive(path).map(JsonPrimitive::getAsDouble).orElse(0.0);
 	}
 
+	@Override
+	public String[] getStringArray(String path) {
+		return object.get(path).getAsJsonArray().asList().stream().map(JsonElement::getAsString).toArray(String[]::new);
+	}
+
+	@Override
+	public ConfigurationAccessor[] getObjectArray(String path) {
+		return object.get(path).getAsJsonArray().asList().stream().map(JsonElement::getAsJsonObject).map(obj -> new JsonConfigurationAccessor("<array.element>", file, obj)).toArray(ConfigurationAccessor[]::new);
+	}
+
 }
